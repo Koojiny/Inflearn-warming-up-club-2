@@ -29,15 +29,34 @@ public class Order {
     }
 
     private void checkOrderStatus() throws OrderException {
-        validateCustomerInformation();
+        // 1. 주문항목 존재 여부 확인
         validateItem();
+        // 2. 총 가격 유효성 확인
         validatePrice();
+        // 3. 사용자 정보 유효성 확인
+        validateCustomerInformation();
+    }
+
+    private void validateItem() throws OrderException {
+        if (hasNotItem()) {
+            throw new OrderException("주문 항목이 없습니다.");
+        }
     }
 
     private void validatePrice() throws OrderException {
         if (isInvalidPrice()) {
             throw new OrderException("올바르지 않은 총 가격입니다.");
         }
+    }
+
+    private void validateCustomerInformation() throws OrderException {
+        if (hasCustomerInfo()) {
+            throw new OrderException("사용자 정보가 없습니다.");
+        }
+    }
+
+    private boolean hasNotItem() {
+        return this.items.isEmpty();
     }
 
     private boolean isInvalidPrice() {
@@ -51,22 +70,6 @@ public class Order {
             sum += price;
         }
         return sum;
-    }
-
-    private void validateItem() throws OrderException {
-        if (hasNotItem()) {
-            throw new OrderException("주문 항목이 없습니다.");
-        }
-    }
-
-    private boolean hasNotItem() {
-        return this.items.isEmpty();
-    }
-
-    private void validateCustomerInformation() throws OrderException {
-        if (hasCustomerInfo()) {
-            throw new OrderException("사용자 정보가 없습니다.");
-        }
     }
 
     private boolean hasCustomerInfo() {
